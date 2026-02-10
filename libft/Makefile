@@ -16,7 +16,8 @@ NAME = libft.a
 BONUS_SRCS = bonus/ft_lstadd_front_bonus.c bonus/ft_lstmap_bonus.c bonus/ft_lstiter_bonus.c bonus/ft_lstclear_bonus.c bonus/ft_lstnew_bonus.c \
 	bonus/ft_lstdelone_bonus.c bonus/ft_lstadd_back_bonus.c bonus/ft_lstlast_bonus.c bonus/ft_lstsize_bonus.c \
 	bonus/ft_dlstclear_bonus.c bonus/ft_dlstdelone_bonus.c bonus/ft_dlstnew_bonus.c bonus/ft_dlstadd_back_bonus.c \
-	bonus/ft_dlstlast_bonus.c bonus/ft_dlst_unwrap_bonus.c bonus/ft_dlstadd_after.c bonus/ft_dlst_split_f.c
+	bonus/ft_dlstlast_bonus.c bonus/ft_dlst_unwrap_bonus.c bonus/ft_dlstadd_after.c bonus/ft_dlst_split_f.c \
+	bonus/ft_dlstsize_bonus.c
 SRCS = srcs/ft_atoi.c srcs/ft_bzero.c srcs/ft_calloc.c srcs/ft_isalnum.c srcs/ft_isalpha.c \
 	srcs/ft_isascii.c srcs/ft_isdigit.c srcs/ft_isprint.c srcs/ft_memchr.c srcs/ft_memcmp.c \
 	srcs/ft_memcpy.c srcs/ft_memmove.c srcs/ft_memset.c srcs/ft_strchr.c srcs/ft_strdup.c \

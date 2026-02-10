@@ -131,6 +131,9 @@ bool				ft_match_found(char *c);
 /*		ft_expander.c	*/
 bool				ft_expander(t_data *data);
 
+/*		ft_convert_token.c	*/
+bool	ft_direct_token_pointers(t_data *data);
+
 /*		DEBUG			*/
 void				ft_print_data(t_data *data);
 /*		DEBUG			*/

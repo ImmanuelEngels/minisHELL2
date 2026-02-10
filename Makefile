@@ -24,6 +24,7 @@ SRCS    = ft_cmds_init.c \
 	ft_superglue_ifs.c \
 	ft_unquoted_expansion.c \
 	ft_free_cmds.c \
+	ft_convert_tokens.c \
 	main.c
 
 OBJS        = $(SRCS:.c=.o)

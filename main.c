@@ -59,6 +59,8 @@ int	main(int ac, char **av, char **env)
 	ft_cmds_create(data);
 	if (!ft_expander(data))
 		return 1;
+	if (!ft_direct_token_pointers(data))
+		return (ft_cleanup_quit(&data, data->malloc_err));
 	ft_print_data(data);
 	return (ft_cleanup_quit(&data, data->malloc_err));
 }

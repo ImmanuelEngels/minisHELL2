@@ -14,7 +14,6 @@ static void	ft_free_redir_content(void *content)
 	if (!content)
 		return ;
 	redir = (t_redir *)content;
-	ft_free((void **)&redir->target);
 	if (redir->tokens)
 		ft_dlstclear(&redir->tokens, ft_free_token_content);
 	ft_free((void **)&redir);
@@ -31,8 +30,6 @@ static void	ft_free_cmd_content(t_cmd **cmd)
 {
 	if (!cmd || !*cmd)
 		return ;
-	if ((*cmd)->argv)
-		ft_free_arrp(&(*cmd)->argv);
 	if ((*cmd)->redirs)
 		ft_free_redirs(&(*cmd)->redirs);
 	if ((*cmd)->tokens)
