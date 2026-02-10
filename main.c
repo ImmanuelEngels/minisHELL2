@@ -50,8 +50,7 @@ bool	ft_prompt(t_data *data)
 			data->quit = true;
 			break;
 		}
-		ft_cmds_create(data);
-		if (!ft_expander(data))
+		if (!ft_cmds_create(data) || !ft_expander(data))
 			return (false);
 		if (!ft_direct_token_pointers(data))
 			return (false);
@@ -67,7 +66,6 @@ bool	ft_prompt(t_data *data)
 int	main(int ac, char **av, char **env)
 {
 	t_data	*data;
-	t_dlist	*tmp;
 
 	data = ft_init_data(ac, av, env);
 	if (!data)
