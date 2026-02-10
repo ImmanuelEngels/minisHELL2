@@ -1,13 +1,26 @@
 #include "minishell.h"
 
-int	ft_cleanup(t_data *data, bool malloc_err)
+int	ft_cleanup_runtime(t_data **data)
 {
-	(void)data;
+	if (!data || !*data)
+		return (1);
+
+	ft_free((void **)&(*data)->line);
+	(*data)->pipeline = NULL;
+
+	if ((*data)->cmds)
+		ft_free_cmds(*data);
+	if ((*data)->quit || (*data)->malloc_err)
+		return (1);
+	return (0);
+}
+
+int	ft_cleanup_quit(t_data **data, bool malloc_err)
+{
+	ft_free_data(data);
 	if (malloc_err)
-		write(2, "minishell> SYSCALL ERROR: Malloc. Exiting\n", 42);
-	//	if (data)
-	//		ft_cleanup(data);
-	return (1);
+		return (write(2, "minishell> SYSCALL ERROR: Malloc. Exiting\n", 42), 1);
+	return (g_exit_status);
 }
 
 t_data	*ft_init_data(int ac, char **av, char **env)
@@ -33,7 +46,7 @@ int	main(int ac, char **av, char **env)
 
 	data = ft_init_data(ac, av, env);
 	if (!data)
-		return (ft_cleanup(NULL, true));
+		return (ft_cleanup_quit(NULL, true));
 	data->line = readline("minishell>");
 	if (!data->line)
 		return (free(data), 1);
@@ -47,8 +60,5 @@ int	main(int ac, char **av, char **env)
 	if (!ft_expander(data))
 		return 1;
 	ft_print_data(data);
-	//	ft_dlstclear(&data->pipeline, free);
-	free(data->line);
-	free(data);
-	return (0);
+	return (ft_cleanup_quit(&data, data->malloc_err));
 }

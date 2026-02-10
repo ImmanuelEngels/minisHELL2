@@ -47,7 +47,6 @@ typedef struct s_ifs
 typedef struct s_redir
 {
 	enum e_redir	type;
-	enum e_err	err;
 	char			*target;
 	bool			quoted;
 	t_dlist			*tokens;
@@ -55,10 +54,19 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
+	enum e_err		err;
 	char			*cmd;
 	char			**argv;
 	t_dlist			*redirs;
 	t_dlist			*tokens;
+	pid_t			pid;
+	int				fd_in;
+	int				fd_out;
+	int				pipe_in[2];
+	int				pipe_out[2];
+	bool			is_builtin;
+	bool			needs_fork;
+	int				exit_status;
 }					t_cmd;
 
 typedef struct s_data
@@ -70,23 +78,25 @@ typedef struct s_data
 	char			**env;
 	bool			err[ERR_MAX];
 	bool			abandon;
+	bool			quit;
 	bool			malloc_err;
 }					t_data;
 
 /*				*/
 bool				ft_tokenize(t_data *data);
 
-
 /*		ft_free.c			*/
-void	ft_free_cmds(t_cmd **cmds);
-void	ft_free_redirs(t_redir *redirs);
+void				ft_free_data(t_data **data);
+void				ft_close_if(int *fd);
+void				ft_free_cmds(t_data *data);
+void				ft_free_redirs(t_dlist **redirs);
 
 /*		ft_redir_init.c		*/
-bool	ft_redir_init(t_cmd *cmd, t_dlist **tokens);
-bool	ft_cmds_create(t_data *data);
+bool				ft_redir_init(t_cmd *cmd, t_dlist **tokens);
+bool				ft_cmds_create(t_data *data);
 
 /*		ft_is.c			*/
-enum e_redir			ft_get_redir_type(char *str);
+enum e_redir		ft_get_redir_type(char *str);
 bool				ft_is_pipe(char *str);
 bool				ft_is_redir(char *str);
 bool				ft_is_operator(char *str);
@@ -100,28 +110,29 @@ t_ifs				*ft_create_ifs(char *value);
 bool				ft_insert_after(t_dlist *at, const char *s, t_dlist **newn);
 void				ft_free_ifs(t_ifs *ifs);
 bool				ft_replace_content(t_dlist *tok, char *newc);
-bool	ft_expand_nq(t_expand *e, t_data *data, t_dlist **tokens);
-bool	ft_superglue_ifs(t_dlist **tok, char *value, size_t start, char **stop);
-
+bool				ft_expand_nq(t_expand *e, t_data *data, t_dlist **tokens);
+bool				ft_superglue_ifs(t_dlist **tok, char *value, size_t start,
+						char **stop);
 
 /*		ft_remove_quotes.c	*/
-bool	ft_remove_quotes(char *q, t_expand *e, t_dlist **tokens, char c);
+bool				ft_remove_quotes(char *q, t_expand *e, t_dlist **tokens,
+						char c);
 
 /*		ft_getenv.c	*/
-char	*ft_getenv(char *name, char **env);
-char	*ft_get_varname(char *str, char **end);
+char				*ft_getenv(char *name, char **env);
+char				*ft_get_varname(char *str, char **end);
 
 /*		ft_expand_dq.c		*/
-bool	ft_expand_dq(t_expand *e, t_data *data, t_dlist **tok);
+bool				ft_expand_dq(t_expand *e, t_data *data, t_dlist **tok);
 
 /*		ft_match_found.c	*/
-bool	ft_match_found(char *c);
+bool				ft_match_found(char *c);
 
 /*		ft_expander.c	*/
-bool	ft_expander(t_data *data);
+bool				ft_expander(t_data *data);
 
 /*		DEBUG			*/
-void	ft_print_data(t_data *data);
+void				ft_print_data(t_data *data);
 /*		DEBUG			*/
 
 #endif

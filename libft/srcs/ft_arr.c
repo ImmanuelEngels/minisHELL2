@@ -59,7 +59,7 @@ char	**ft_arrdup(char **arr)
 	{
 		n_arr[i] = ft_strdup(arr[i]);
 		if (!n_arr[i])
-			return (ft_free_arr(n_arr));
+			return (ft_free_arrp(&n_arr));
 		i++;
 	}
 	n_arr[size] = NULL;
@@ -98,7 +98,7 @@ char	**ft_append_arr(char **arr, char *str)
 	if (!new_arr[n])
 	{
 		free(new_arr);
-		return (ft_free_arr(arr));
+		return (ft_free_arrp(&arr));
 	}
 	i = 0;
 	while (i < n)

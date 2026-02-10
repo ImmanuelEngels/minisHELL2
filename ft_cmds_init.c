@@ -89,15 +89,15 @@ bool	ft_cmds_create(t_data *data)
 	{
 		data->cmds[i] = ft_cmd_new();
 		if (!data->cmds[i])
-			return (ft_free_cmds(data->cmds), false);
+			return (ft_free_cmds(data), false);
 	}
 	if (!ft_cmds_init(data))
-		return (ft_free_cmds(data->cmds), false);
+		return (ft_free_cmds(data), false);
 	i = -1;
 	while ((size_t)(++i) < data->n_cmds)
 	{
 		if (!ft_redir_init(data->cmds[i], &data->cmds[i]->tokens))
-			return (ft_free_cmds(data->cmds), false);
+			return (ft_free_cmds(data), false);
 	}
 	return (true);
 }

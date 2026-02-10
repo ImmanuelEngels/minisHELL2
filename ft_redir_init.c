@@ -42,7 +42,7 @@ static bool	ft_redir_attach(t_cmd *cmd, t_dlist *op, t_dlist *target)
 		return (ft_dlstdelone(op, free), ft_dlstdelone(target, free), false);
 	redir->type = ft_get_redir_type((char *)op->content);
 	if (redir->type == R_MAX)
-		return (ft_free_redirs(redir), ft_dlstdelone(op, free),
+		return (ft_free_redirs(&cmd->redirs), ft_dlstdelone(op, free),
 			ft_dlstdelone(target, free), false);
 	redir->quoted = (ft_strchr((char *)target->content, '\'')
 				|| ft_strchr((char *)target->content, '"'));
@@ -50,7 +50,7 @@ static bool	ft_redir_attach(t_cmd *cmd, t_dlist *op, t_dlist *target)
 	ft_dlstadd_back(&redir->tokens, target);
 	rnode = ft_dlstnew(redir);
 	if (!rnode)
-		return (ft_free_redirs(redir), false);
+		return (ft_free_redirs(&cmd->redirs), false);
 	ft_dlstadd_back(&cmd->redirs, rnode);
 	return (true);
 }

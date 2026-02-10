@@ -1,18 +1,11 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: imengels <imengels@student.42vienna.com>   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/10/22 13:50:48 by imengels          #+#    #+#              #
-#    Updated: 2025/10/22 13:50:50 by imengels         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -g -lreadline -MP -MMD
-NAME    = minishell 
+CFLAGS  = -Wall -Wextra -Werror -g -MP -MMD
+RLFLAGS = -lreadline
+
+NAME    = minishell
+VALNAME = minishell_val
+
+VAL_CFLAGS = $(CFLAGS) -O0 -g3
 
 SRCS    = ft_cmds_init.c \
 	ft_expand_dq.c \
@@ -30,17 +23,32 @@ SRCS    = ft_cmds_init.c \
 	ft_sort_token.c \
 	ft_superglue_ifs.c \
 	ft_unquoted_expansion.c \
+	ft_free_cmds.c \
 	main.c
 
-OBJS    = $(SRCS:.c=.o)
-DEPS    = $(OBJS:.o=.d)
+OBJS        = $(SRCS:.c=.o)
+DEPS        = $(OBJS:.o=.d)
+
+VAL_OBJS    = $(SRCS:.c=.val.o)
+VAL_DEPS    = $(VAL_OBJS:.o=.d)
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
+           --track-origins=yes --suppressions=readline.supp
 
 LIBFT   = libft/libft.a
 
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(RLFLAGS) $(LIBFT) -o $(NAME)
+
+# New target: val
+val: $(LIBFT) $(VALNAME)
+
+valrun: val
+	$(VALGRIND) ./$(VALNAME)
+
+$(VALNAME): $(VAL_OBJS) $(LIBFT)
+	$(CC) $(VAL_CFLAGS) $(VAL_OBJS) $(RLFLAGS) $(LIBFT) -o $(VALNAME)
 
 $(LIBFT):
 	$(MAKE) -C libft bonus
@@ -48,17 +56,20 @@ $(LIBFT):
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+%.val.o: %.c
+	$(CC) $(VAL_CFLAGS) -c $< -o $@
+
 clean:
 	$(MAKE) -C libft clean
-	rm -f $(OBJS) $(DEPS)
+	rm -f $(OBJS) $(DEPS) $(VAL_OBJS) $(VAL_DEPS)
 
 fclean: clean
 	$(MAKE) -C libft fclean
-	rm -f $(NAME)
+	rm -f $(NAME) $(VALNAME)
 
 re: fclean all
 
--include $(DEPS)
+-include $(DEPS) $(VAL_DEPS)
 
-.PHONY: all clean fclean re
+.PHONY: all val valrun clean fclean re
 

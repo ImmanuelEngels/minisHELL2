@@ -62,7 +62,7 @@ char	**ft_split_f(char const *s, bool (*f)(unsigned char))
 		end = ft_strchr_if_f(s, f, 0);
 		*arr = ft_substr(s, 0, end - s);
 		if (!*arr)
-			return (ft_free_arr(temp));
+			return (ft_free_arrp(&temp));
 		s = end;
 		arr++;
 	}

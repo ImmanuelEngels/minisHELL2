@@ -45,8 +45,10 @@ void					*ft_calloc(size_t nmemb, size_t size);
 
 /*		FT_STR_MLC		*/
 char					*ft_strdup(const char *s);
-char					*ft_insertsubstr(char *src, char *insert, size_t i_len, size_t pos);
-char					*ft_delsubstr(char *src, char *del, size_t d_len, size_t pos);
+char					*ft_insertsubstr(char *src, char *insert, size_t i_len,
+							size_t pos);
+char					*ft_delsubstr(char *src, char *del, size_t d_len,
+							size_t pos);
 char					*ft_substr(char const *s, unsigned int start,
 							size_t len);
 char					*ft_strjoin(char const *s1, char const *s2);
@@ -98,7 +100,7 @@ void					ft_add_utable(const char *set, t_utable *table);
 void					*ft_close(int *fd);
 void					*ft_free2(void **ptr1, void **ptr3);
 void					*ft_free(void **ptr1);
-void					*ft_free_arr(char **arr);
+void					*ft_free_arrp(char ***arrp);
 void					*ft_free_intarr(int **arr);
 /*______________________________________*/
 

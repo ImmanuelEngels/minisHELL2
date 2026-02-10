@@ -47,17 +47,17 @@ void	*ft_close(int *fd)
 	return (NULL);
 }
 
-void	*ft_free_arr(char **arr)
+void	*ft_free_arrp(char ***arrp)
 {
 	size_t	i;
 
-	if (arr)
-	{
-		i = 0;
-		while (arr[i])
-			ft_free((void **)&arr[i++]);
-		free(arr);
-	}
+	if (!arrp || !*arrp)
+		return (NULL);
+	i = 0;
+	while ((*arrp)[i])
+		ft_free((void **)&(*arrp)[i++]);
+	free(*arrp);
+	*arrp = NULL;
 	return (NULL);
 }
 

@@ -1,33 +1,26 @@
-#include "minishell.h"
+#include "minishell.h" 
 
-void	ft_free_redirs(t_redir *redirs)
+void	ft_close_if(int *fd)
 {
-	if (!redirs)
+	if (!fd)
 		return ;
-	if (redirs->target)
-		free(redirs->target);
-	if (redirs->tokens)
-		ft_dlstclear(&redirs->tokens, free);
-	free(redirs);
+	if (*fd > 2)
+		close(*fd);
+	*fd = -1;
 }
 
-void	ft_free_cmds(t_cmd **cmds)
-{
-	size_t	i;
 
-	i = 0;
-	if (!cmds)
+void	ft_free_data(t_data **data)
+{
+	if (!data || !*data)
 		return ;
-	while (cmds[i])
-	{
-		if (cmds[i]->tokens)
-			ft_dlstclear(&cmds[i]->tokens, free);
-		if (cmds[i]->redirs)
-			ft_dlstclear(&cmds[i]->redirs, (void (*)(void *))ft_free_redirs);
-		if (cmds[i]->argv)
-			ft_free_arr(cmds[i]->argv);
-		free(cmds[i]);
-		i++;
-	}
-	free(cmds);
+	ft_free((void **)&(*data)->line);
+	(*data)->pipeline = NULL;
+	if ((*data)->cmds)
+		ft_free_cmds(*data);
+	if ((*data)->env)
+		ft_free_arrp(&(*data)->env);
+	ft_free((void **)data);
+	rl_clear_history();
 }
+
