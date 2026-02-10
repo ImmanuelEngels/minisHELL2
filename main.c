@@ -39,6 +39,31 @@ t_data	*ft_init_data(int ac, char **av, char **env)
 	return (data);
 }
 
+bool	ft_prompt(t_data *data)
+{
+	while (data && !data->malloc_err && !data->quit)
+	{
+		data->line = readline("minishell>");
+		if (!data->line)
+		{
+			/* Ctrl-D / EOF */
+			data->quit = true;
+			break;
+		}
+		ft_cmds_create(data);
+		if (!ft_expander(data))
+			return (false);
+		if (!ft_direct_token_pointers(data))
+			return (false);
+
+		/* TODO: execution */
+
+		if (ft_cleanup_runtime(&data))
+			break;
+	}
+	return (data && !data->malloc_err);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	*data;
@@ -47,19 +72,7 @@ int	main(int ac, char **av, char **env)
 	data = ft_init_data(ac, av, env);
 	if (!data)
 		return (ft_cleanup_quit(NULL, true));
-	data->line = readline("minishell>");
-	if (!data->line)
-		return (free(data), 1);
-	if (!ft_tokenize(data))
-	{
-		tmp = data->pipeline;
-		for (; tmp; tmp = tmp->next)
-			printf("LINEEEE[%s]\n", (char *)tmp->content);
-	}
-	ft_cmds_create(data);
-	if (!ft_expander(data))
-		return 1;
-	if (!ft_direct_token_pointers(data))
+	if (ft_prompt(data))
 		return (ft_cleanup_quit(&data, data->malloc_err));
 	ft_print_data(data);
 	return (ft_cleanup_quit(&data, data->malloc_err));
